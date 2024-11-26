@@ -9,6 +9,7 @@ import {
 import * as y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import { IndexeddbPersistence } from 'y-indexeddb';
+import { usePersistentCallback } from '@/hooks';
 
 type YContextValue = {
   doc: y.Doc;
@@ -22,10 +23,10 @@ function useStateRef<T>(initialValue?: T) {
   const [value, setValue] = useState(initialValue);
   const ref = useRef(value);
 
-  const setRef = (value: T) => {
+  const setRef = usePersistentCallback((value: T) => {
     ref.current = value;
     setValue(value);
-  };
+  });
 
   return [ref, setRef] as const;
 }
@@ -51,7 +52,7 @@ export function YProvider({
   useEffect(() => {
     setWebrtcProvider(
       new WebrtcProvider(sessionId, doc, {
-        signaling: ['ws://localhost:5555'],
+        signaling: ['ws://localhost:4444'],
       })
     );
 

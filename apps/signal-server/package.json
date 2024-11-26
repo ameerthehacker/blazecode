@@ -3,18 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
-    "lint": "eslint",
-    "test": "vitest",
-    "cf-typegen": "wrangler types"
-  },
-  "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.5.2",
-    "@cloudflare/workers-types": "^4.20241112.0",
-    "typescript": "^5.5.2",
-    "vitest": "2.0.5",
-    "wrangler": "^3.60.3"
+    "dev": "deno --watch --allow-net --allow-env ./mod.ts",
+    "lint": "deno lint"
   }
 }

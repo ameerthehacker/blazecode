@@ -1,4 +1,4 @@
-import { Files, YAwarness, YUSer } from '@/common/types';
+import { Files, YAwarness, YUSer as YUser } from '@/common/types';
 import { getRandomColor, injectYMonacoCSS } from '@/common/utils';
 import { useUser } from '@/contexts/user';
 import { useY } from '@/contexts/y-doc';
@@ -6,12 +6,6 @@ import { needsTemplateHydration, setNeedsTemplateHydration } from '@/storage';
 import { useEffect, useRef, useState } from 'react';
 
 const FILES_MAP_KEY = 'files';
-
-// force re-render
-function useReRender() {
-  const [, setValue] = useState(0);
-  return () => setValue((value) => value + 1);
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useDebounce<T extends (...args: any[]) => void>(
@@ -29,6 +23,12 @@ export function useDebounce<T extends (...args: any[]) => void>(
     }, delay);
     setTimeoutId(id);
   });
+}
+
+// force re-render
+function useReRender() {
+  const [, setValue] = useState(0);
+  return usePersistentCallback(() => setValue((value) => value + 1));
 }
 
 export function useYFilesSetup(files: Files, sessionId: string) {
@@ -82,25 +82,13 @@ export function useAwarness() {
   const { webrtcProvider } = useY();
   const awarness = webrtcProvider?.awareness;
   const { name } = useUser();
-  const users: YUSer[] = (() => {
-    const users: YUSer[] = [];
-    awarness?.getStates().forEach((state) => {
-      const user = (state as YAwarness).user;
-      if (user) users.push(user);
-    });
-
-    return users;
-  })();
-  const rerender = useReRender();
-  const usedUserColors = users
-    .map((user) => user?.color)
-    .filter(Boolean) as string[];
   const user = (awarness?.getLocalState() as YAwarness | undefined)?.user;
-  const patchUserState = usePersistentCallback((patch: Partial<YUSer>) => {
+  const rerender = useReRender();
+  const patchUserState = usePersistentCallback((patch: Partial<YUser>) => {
     const localState = awarness?.getLocalState() as YAwarness;
     awarness?.setLocalState({
       ...localState,
-      user: { ...localState.user, ...patch } as YUSer,
+      user: { ...localState.user, ...patch } as YUser,
     } as YAwarness);
   });
   const setUserActive = usePersistentCallback((isActive: boolean) => {
@@ -114,8 +102,16 @@ export function useAwarness() {
       patchUserState({ cursor });
     }
   );
+  const getUsers = usePersistentCallback(() => {
+    const users: YUser[] = [];
+    awarness?.getStates().forEach((state) => {
+      const user = (state as YAwarness).user;
+      if (user) users.push(user);
+    });
 
-  // rerender whenever awarness info changes
+    return users;
+  });
+
   useEffect(() => {
     const onChange = () => rerender();
     awarness?.on('change', onChange);
@@ -127,17 +123,17 @@ export function useAwarness() {
     patchUserState({
       id: awarness?.clientID,
       name,
-      color: getRandomColor(usedUserColors),
+      color: getRandomColor(getUsers().map((user) => user.color)),
     });
-  }, [name, awarness, patchUserState, usedUserColors]);
+  }, [name, awarness, patchUserState, getUsers]);
 
   useEffect(() => {
-    injectYMonacoCSS(users);
+    injectYMonacoCSS(getUsers());
   });
 
   return {
     user,
-    participants: users.filter((user) => user.id !== awarness?.clientID),
+    participants: getUsers().filter((user) => user.id !== awarness?.clientID),
     setUserActive,
     setOpenFilePath,
     setCursor,

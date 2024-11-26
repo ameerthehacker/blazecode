@@ -143,8 +143,8 @@ export default function CodeEditor({ filePath }: { filePath: string }) {
     if (initialEditorCursor) {
       editor?.focus();
       editor?.setPosition(initialEditorCursor);
+      resetInitialEditorCursor();
     }
-    resetInitialEditorCursor();
   }, [editor, initialEditorCursor, resetInitialEditorCursor]);
 
   return (
