@@ -1,0 +1,49 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Enhanced gradient for more depth -->
+    <linearGradient id="boltGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#FFA500"/>
+    </linearGradient>
+    
+    <!-- Refined glow effect -->
+    <filter id="professionalGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#FFB732" flood-opacity="0.3" result="glowColor"/>
+      <feComposite in="glowColor" in2="blur" operator="in" result="softGlow"/>
+      <feMerge>
+        <feMergeNode in="softGlow"/>
+        <feMergeNode in="softGlow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main thunderbolt with corrected top left path -->
+  <path 
+    d="M100 25 
+       C100 25 100 25 100 25
+       L70 90 
+       Q69 92 71 92 
+       L95 92 
+       L55 175
+       Q53 178 56 176
+       L150 95
+       Q152 93 150 93
+       L120 93
+       L140 25
+       C140 25 140 25 140 25
+       L100 25Z" 
+    fill="url(#boltGradient)"
+    filter="url(#professionalGlow)"
+  />
+  
+  <!-- Subtle highlight detail -->
+  <path 
+    d="M100 30 L80 85 L100 85 L70 155" 
+    fill="none"
+    stroke="rgba(255,255,255,0.4)"
+    stroke-width="1.5"
+    stroke-linecap="round"
+  />
+</svg>
