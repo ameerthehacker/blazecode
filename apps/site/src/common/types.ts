@@ -21,4 +21,4 @@ export type YUSer = {
 
 export type YAwarness = {
   user?: YUSer;
-};
+} | null;

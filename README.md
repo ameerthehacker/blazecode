@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/thunderbolt.svg" alt="BlazeCode Logo" width="150" height="150"/>
+  <img src="./apps/site/public/thunderbolt.svg" alt="BlazeCode Logo" width="150" height="150"/>
 </div>
 
 <h1 align="center">BlazeCode</h1>
@@ -16,9 +16,9 @@ BlazeCode is a zero-friction, serverless code collaboration platform designed sp
 
 ## 🚀 Getting Started
 
-1. Visit [BlazeCode Website URL]
+1. Visit [blazecode.vercel.app](https://blazecode.vercel.app)
 2. Create a session
-3. Share the session URL with your interview candidate
+3. Share the session URL with your interview candidate / friends
 4. Start coding together immediately!
 
 ## 💡 Why BlazeCode?
@@ -37,6 +37,7 @@ BlazeCode eliminates these pain points by leveraging WebRTC for direct peer-to-p
 - Y.js on WebRTC
 - Vite
 - Shadcn UI
+- Tailwind
 
 ## 🔒 Security
 

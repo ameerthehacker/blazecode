@@ -31,6 +31,11 @@ function useStateRef<T>(initialValue?: T) {
   return [ref, setRef] as const;
 }
 
+const PROD_SIGNAL_SERVER = 'wss://blazecode.deno.dev';
+const SIGNAL_SERVER = import.meta.env.DEV
+  ? import.meta.env.VITE_SIGNAL_SERVER || PROD_SIGNAL_SERVER
+  : PROD_SIGNAL_SERVER;
+
 export function YProvider({
   children,
   sessionId,
@@ -52,7 +57,7 @@ export function YProvider({
   useEffect(() => {
     setWebrtcProvider(
       new WebrtcProvider(sessionId, doc, {
-        signaling: ['ws://localhost:4444'],
+        signaling: [SIGNAL_SERVER],
       })
     );
 

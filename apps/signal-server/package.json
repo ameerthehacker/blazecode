@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "deno --watch --allow-net --allow-env ./mod.ts",
+    "dev": "deno --watch --allow-net --allow-env ./main.ts",
     "lint": "deno lint"
   }
 }

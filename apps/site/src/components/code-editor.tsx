@@ -8,6 +8,7 @@ import { assert } from '@/common/utils';
 import { YText } from 'yjs/dist/src/types/YText';
 import { useSandpack } from '@codesandbox/sandpack-react';
 import { useEditorState } from '@/hooks/state';
+import { Spinner } from './ui/spinner';
 
 const darkTheme: editor.IStandaloneThemeData = {
   base: 'vs-dark',
@@ -158,6 +159,13 @@ export default function CodeEditor({ filePath }: { filePath: string }) {
           minimap: { enabled: false },
           fontFamily: 'IBM Plex Mono',
         }}
+        loading={
+          <Spinner
+            size="lg"
+            delay={500}
+            text={<span className="text-sm text-gray-300">Loading...</span>}
+          />
+        }
         beforeMount={(monaco) =>
           monaco.editor.defineTheme('bc-dark', darkTheme)
         }

@@ -86,10 +86,11 @@ export function useAwarness() {
   const rerender = useReRender();
   const patchUserState = usePersistentCallback((patch: Partial<YUser>) => {
     const localState = awarness?.getLocalState() as YAwarness;
-    awarness?.setLocalState({
+    const newLocalState = {
       ...localState,
-      user: { ...localState.user, ...patch } as YUser,
-    } as YAwarness);
+      user: { ...localState?.user, ...patch } as YUser,
+    } as YAwarness;
+    awarness?.setLocalState(newLocalState);
   });
   const setUserActive = usePersistentCallback((isActive: boolean) => {
     patchUserState({ isActive });
@@ -105,7 +106,7 @@ export function useAwarness() {
   const getUsers = usePersistentCallback(() => {
     const users: YUser[] = [];
     awarness?.getStates().forEach((state) => {
-      const user = (state as YAwarness).user;
+      const user = (state as YAwarness | undefined)?.user;
       if (user) users.push(user);
     });
 

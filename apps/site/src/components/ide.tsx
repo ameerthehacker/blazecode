@@ -14,6 +14,7 @@ import { ResizablePanelGroup } from './ui/resizable';
 import Editor from './editor';
 import { SandpackProvider } from '@codesandbox/sandpack-react';
 import { ProjectTemplate } from '@/common/types';
+import { Spinner } from './ui/spinner';
 
 export default function IDE({
   template,
@@ -30,47 +31,62 @@ export default function IDE({
     .sort();
   useYFilesSetup(template.files, sessionId);
 
-  return filePaths.length > 0 ? (
-    <SandpackProvider
-      files={Object.fromEntries(
-        Object.entries(files).map(([path, content]) => [
-          path,
-          { code: content },
-        ])
-      )}
-      customSetup={{
-        entry: template.entry,
-      }}
-      className="h-full"
-      theme="dark"
-    >
-      <div className="p-4 h-full">
-        <ResizablePanelGroup className="gap-0.5" direction="horizontal">
-          <ResizablePanel className="rounded-lg" defaultSize={70}>
-            <Card className="w-full">
-              <CardContent className="p-0">
-                <Editor
-                  filePaths={filePaths}
-                  defaultSelectedFilePath={template.defaultSelectedFilePath}
-                  sessionId={sessionId}
-                />
-              </CardContent>
-            </Card>
-          </ResizablePanel>
-          <ResizableHandle
-            onDragging={(isDragging) => setIsResizing(isDragging)}
-            className="bg-transparent"
+  return (
+    <div className="h-lvh w-full">
+      {filePaths.length > 0 ? (
+        <SandpackProvider
+          files={Object.fromEntries(
+            Object.entries(files).map(([path, content]) => [
+              path,
+              { code: content },
+            ])
+          )}
+          customSetup={{
+            entry: template.entry,
+          }}
+          className="h-full"
+          theme="dark"
+        >
+          <div className="p-4 h-full">
+            <ResizablePanelGroup className="gap-0.5" direction="horizontal">
+              <ResizablePanel className="rounded-lg" defaultSize={70}>
+                <Card className="w-full">
+                  <CardContent className="p-0">
+                    <Editor
+                      filePaths={filePaths}
+                      defaultSelectedFilePath={template.defaultSelectedFilePath}
+                      sessionId={sessionId}
+                    />
+                  </CardContent>
+                </Card>
+              </ResizablePanel>
+              <ResizableHandle
+                onDragging={(isDragging) => setIsResizing(isDragging)}
+                className="bg-transparent"
+              />
+              <ResizablePanel maxSize={50} minSize={10}>
+                <SandpackLayout className="h-full relative">
+                  <SandpackPreview
+                    showNavigator
+                    showOpenInCodeSandbox={false}
+                  />
+                  {isResizing && (
+                    <div className="absolute h-full w-full inset-0 z-50" />
+                  )}
+                </SandpackLayout>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </div>
+        </SandpackProvider>
+      ) : (
+        <div className="h-full w-full flex items-center justify-center">
+          <Spinner
+            delay={500}
+            size="lg"
+            text={<span className="text-sm text-gray-300">Syncing...</span>}
           />
-          <ResizablePanel maxSize={50} minSize={10}>
-            <SandpackLayout className="h-full relative">
-              <SandpackPreview showNavigator showOpenInCodeSandbox={false} />
-              {isResizing && (
-                <div className="absolute h-full w-full inset-0 z-50" />
-              )}
-            </SandpackLayout>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </div>
-    </SandpackProvider>
-  ) : null;
+        </div>
+      )}
+    </div>
+  );
 }
