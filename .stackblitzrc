@@ -1,0 +1,4 @@
+{
+  "installDependencies": false,
+  "startCommand": "cd apps/site && pnpm install && pnpm run dev"
+}
