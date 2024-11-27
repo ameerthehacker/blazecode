@@ -6,6 +6,21 @@
 
 BlazeCode is a zero-friction, serverless code collaboration platform designed specifically for technical interviews. No logins, no installations, just instant collaboration.
 
+<div align="center">
+  <a href="https://app.netlify.com/start/deploy?repository=https://github.com/ameerthehacker/blazecode" 
+     target="_blank"
+     rel="noopener noreferrer"
+     class="inline-flex items-center hover:opacity-90 transition-opacity">
+    <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify" />
+  </a>
+  <a href="https://vercel.com/new/clone?repository-url=https://github.com/ameerthehacker/blazecode&root-directory=apps/site&framework=vite"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="inline-flex items-center hover:opacity-90 transition-opacity">
+    <img src="https://vercel.com/button" alt="Deploy with Vercel" />
+  </a>
+</div>
+
 ## ✨ Key Features
 
 - **No Login Required**: Start collaborating instantly without creating accounts
