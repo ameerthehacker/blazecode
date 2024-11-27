@@ -16,6 +16,12 @@
      class="inline-flex items-center hover:opacity-90 transition-opacity">
     <img src="https://vercel.com/button" alt="Deploy with Vercel" />
   </a>
+   <a href="https://stackblitz.com/github/ameerthehacker/blazecode"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="inline-flex items-center hover:opacity-90 transition-opacity">
+    <img src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" alt="Open in StackBlitz" />
+  </a>
 </div>
 
 Blazecode is a zero-friction, serverless code collaboration platform designed specifically for technical interviews. No logins, no installations, just instant collaboration.
