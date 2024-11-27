@@ -8,9 +8,9 @@ export type ProjectTemplate = {
 };
 
 export type YUSer = {
-  id: number;
-  name: string;
-  color: string;
+  id?: number;
+  name?: string;
+  color?: string;
   openFilePath?: string;
   isActive?: boolean;
   cursor?: {

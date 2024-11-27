@@ -77,50 +77,61 @@ export default function Editor({
                       .filter(
                         (participant) => participant.openFilePath === filePath
                       )
-                      .map((participant) => (
-                        <Tooltip key={participant.id}>
-                          <TooltipTrigger>
-                            <span style={{ color: participant.color }}>
-                              {getInitials(participant.name)}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>{participant.name}</TooltipContent>
-                        </Tooltip>
-                      ))}
+                      .map(
+                        (participant) =>
+                          participant.name && (
+                            <Tooltip key={participant.id}>
+                              <TooltipTrigger>
+                                <span style={{ color: participant.color }}>
+                                  {getInitials(participant.name)}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                {participant.name}
+                              </TooltipContent>
+                            </Tooltip>
+                          )
+                      )}
                   </div>
                 </div>
               </TabsTrigger>
             );
           })}
           <div className="absolute right-0 pr-1 flex flex-row gap-1 justify-center align-center">
-            {awarness.participants.map((participant) => (
-              <Tooltip key={participant.id}>
-                <TooltipTrigger>
-                  <Avatar
-                    className="w-8 h-8"
-                    onClick={() => {
-                      const { cursor, openFilePath } = participant;
-                      if (openFilePath) setOpenEditorFilePath(openFilePath);
-                      if (cursor) setInitialEditorCursor(cursor);
-                    }}
-                  >
-                    <AvatarFallback
-                      className="text-white"
-                      style={{
-                        background: participant.color,
-                        border: `1.5px solid ${darkenHexColor(
-                          participant.color,
-                          0.2
-                        )}`,
-                      }}
-                    >
-                      {getInitials(participant.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                </TooltipTrigger>
-                <TooltipContent className="">{participant.name}</TooltipContent>
-              </Tooltip>
-            ))}
+            {awarness.participants.map(
+              (participant) =>
+                participant.name &&
+                participant.color && (
+                  <Tooltip key={participant.id}>
+                    <TooltipTrigger>
+                      <Avatar
+                        className="w-8 h-8"
+                        onClick={() => {
+                          const { cursor, openFilePath } = participant;
+                          if (openFilePath) setOpenEditorFilePath(openFilePath);
+                          if (cursor) setInitialEditorCursor(cursor);
+                        }}
+                      >
+                        <AvatarFallback
+                          className="text-white"
+                          style={{
+                            background: participant.color,
+                            border: `1.5px solid ${darkenHexColor(
+                              participant.color,
+                              0.2
+                            )}`,
+                          }}
+                        >
+                          {getInitials(participant.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TooltipTrigger>
+                    <TooltipContent className="">
+                      {participant.name}
+                    </TooltipContent>
+                  </Tooltip>
+                )
+            )}
           </div>
         </TabsList>
       </Tabs>

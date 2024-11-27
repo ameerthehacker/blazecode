@@ -7,7 +7,7 @@ import { TooltipProvider } from '@radix-ui/react-tooltip';
 
 const router = createBrowserRouter([
   { path: '/', element: <SessionCreator /> },
-  { path: '/session/:id', element: <SessionPage /> },
+  { path: '/session/:id', element: <SessionPage />, hasErrorBoundary: false },
   { path: '*', element: <_404Page /> },
 ]);
 

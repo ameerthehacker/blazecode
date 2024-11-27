@@ -111,7 +111,7 @@ export function getYMonacoCSS(user: YUSer) {
 
   return css`
     .yRemoteSelection-${id} {
-      background: ${alphaHexColor(color, 0.5)};
+      background: ${color ? alphaHexColor(color, 0.5) : 'transparent'};
     }
 
     .yRemoteSelectionHead-${id} {

@@ -124,7 +124,11 @@ export function useAwarness() {
     patchUserState({
       id: awarness?.clientID,
       name,
-      color: getRandomColor(getUsers().map((user) => user.color)),
+      color: getRandomColor(
+        getUsers()
+          .map((user) => user.color)
+          .filter(Boolean)
+      ),
     });
   }, [name, awarness, patchUserState, getUsers]);
 
