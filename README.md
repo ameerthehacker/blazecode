@@ -28,6 +28,7 @@ Blazecode is a zero-friction, serverless code collaboration platform designed sp
 - **Serverless Architecture**: Powered by WebRTC for peer-to-peer connections
 - **Real-time Collaboration**: Live code editing and sharing
 - **Privacy Focused**: No data stored on servers
+- **Self Hostable**: It is just a static react app so deploy to your own vercel/netlify/CDN in a jiffy
 
 ## 🚀 Getting Started
 
