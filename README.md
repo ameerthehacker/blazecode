@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="./apps/site/public/thunderbolt.svg" alt="BlazeCode Logo" width="150" height="150"/>
+  <img src="./apps/site/public/thunderbolt.svg" alt="Blazecode Logo" width="150" height="150"/>
 </div>
 
-<h1 align="center">BlazeCode</h1>
+<h1 align="center">Blazecode</h1>
 
-BlazeCode is a zero-friction, serverless code collaboration platform designed specifically for technical interviews. No logins, no installations, just instant collaboration.
+Blazecode is a zero-friction, serverless code collaboration platform designed specifically for technical interviews. No logins, no installations, just instant collaboration.
 
 <div align="center">
   <a href="https://app.netlify.com/start/deploy?repository=https://github.com/ameerthehacker/blazecode" 
@@ -36,7 +36,7 @@ BlazeCode is a zero-friction, serverless code collaboration platform designed sp
 3. Share the session URL with your interview candidate / friends
 4. Start coding together immediately!
 
-## 💡 Why BlazeCode?
+## 💡 Why Blazecode?
 
 Traditional interview platforms often come with unnecessary friction:
 
@@ -45,7 +45,7 @@ Traditional interview platforms often come with unnecessary friction:
 - Complex setup processes
 - Server-dependent architectures
 
-BlazeCode eliminates these pain points by leveraging WebRTC for direct peer-to-peer connections, ensuring a smooth and immediate collaboration experience.
+Blazecode eliminates these pain points by leveraging WebRTC for direct peer-to-peer connections, ensuring a smooth and immediate collaboration experience.
 
 ## 🛠️ Technology Stack
 
