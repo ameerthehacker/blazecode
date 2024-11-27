@@ -3,9 +3,6 @@
 </div>
 
 <h1 align="center">Blazecode</h1>
-
-Blazecode is a zero-friction, serverless code collaboration platform designed specifically for technical interviews. No logins, no installations, just instant collaboration.
-
 <div align="center">
   <a href="https://app.netlify.com/start/deploy?repository=https://github.com/ameerthehacker/blazecode" 
      target="_blank"
@@ -20,6 +17,8 @@ Blazecode is a zero-friction, serverless code collaboration platform designed sp
     <img src="https://vercel.com/button" alt="Deploy with Vercel" />
   </a>
 </div>
+
+Blazecode is a zero-friction, serverless code collaboration platform designed specifically for technical interviews. No logins, no installations, just instant collaboration.
 
 ## ✨ Key Features
 
