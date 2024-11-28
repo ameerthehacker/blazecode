@@ -49,7 +49,6 @@ export default function memfsPlugin(): Plugin {
           MEMFS_DIR_PATH,
           id.replace(MEMFS_SCHEME, '')
         );
-        console.log(id, targetDirPath);
         return generateMemFS(targetDirPath);
       }
     },

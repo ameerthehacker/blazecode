@@ -3,6 +3,8 @@ import CodeEditor from './code-editor';
 import { Braces } from 'lucide-react';
 import ReactLogo from './logos/react.svg?react';
 import CSSLogo from './logos/css.svg?react';
+import HTMLLogo from './logos/html.svg?react';
+import JSLogo from './logos/js.svg?react';
 import { getLastSelectedFilePath, setLastSelectedFilePath } from '@/storage';
 import { useEffect } from 'react';
 import { useAwarness } from '@/hooks';
@@ -15,8 +17,10 @@ const fileIconMap: {
   [extension: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 } = {
   jsx: ReactLogo,
+  html: HTMLLogo,
   tsx: ReactLogo,
   css: CSSLogo,
+  js: JSLogo,
 };
 
 const getFilename = (filePath: string) => {

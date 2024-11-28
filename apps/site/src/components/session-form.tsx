@@ -3,17 +3,21 @@ import { Button } from './ui/button';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from './ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { getUsername } from '@/storage';
+import { getLastTemplate, getUsername } from '@/storage';
+import { TemplateSelector } from './template-selector';
 
 export type FormData = {
   name: string;
+  template?: string;
 };
 
 export default function SessionForm({
   title,
+  requireTemplate,
   onSubmit,
 }: {
   title: string;
+  requireTemplate?: boolean;
   onSubmit: (data: FormData) => void;
 }) {
   const {
@@ -23,6 +27,7 @@ export default function SessionForm({
   } = useForm<FormData>({
     defaultValues: {
       name: getUsername(),
+      template: getLastTemplate() || 'react',
     },
   });
 
@@ -53,6 +58,26 @@ export default function SessionForm({
               <p className="text-sm text-red-500">{errors.name.message}</p>
             )}
           </div>
+          {requireTemplate && (
+            <div className="space-y-2">
+              <Controller
+                control={control}
+                name="template"
+                rules={{ required: 'Template is required' }}
+                render={({ field }) => (
+                  <TemplateSelector
+                    value={field.value}
+                    onChange={(value) => field.onChange(value)}
+                  />
+                )}
+              />
+              {errors.template && (
+                <p className="text-sm text-red-500">
+                  {errors.template.message}
+                </p>
+              )}
+            </div>
+          )}
           <Button size="lg" type="submit" className="w-full">
             Start Collaborating
           </Button>

@@ -2,7 +2,10 @@ import { Files, YAwarness, YUSer as YUser } from '@/common/types';
 import { getRandomColor, injectYMonacoCSS } from '@/common/utils';
 import { useUser } from '@/contexts/user';
 import { useY } from '@/contexts/y-doc';
-import { needsTemplateHydration, setNeedsTemplateHydration } from '@/storage';
+import {
+  needsTemplateHydration,
+  setNeedsTemplateHydration,
+} from '@/storage';
 import { useEffect, useRef, useState } from 'react';
 
 const FILES_MAP_KEY = 'files';
@@ -35,9 +38,8 @@ export function useYFilesSetup(files: Files, sessionId: string) {
   const { doc } = useY();
   useEffect(() => {
     const yFilesMap = doc.getMap<boolean>(FILES_MAP_KEY);
-    const shouldHydrate = needsTemplateHydration(sessionId);
 
-    if (shouldHydrate) {
+    if (needsTemplateHydration(sessionId)) {
       for (const filePath in files) {
         if (!yFilesMap.has(filePath)) {
           yFilesMap.set(filePath, true);
