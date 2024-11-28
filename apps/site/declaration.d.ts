@@ -1,9 +1,6 @@
-declare module '@/project-templates' {
-  type Files = {
+declare module '@/memfs/*' {
+  const Files: {
     [filePath: string]: string;
   };
-  const templates: {
-    react: Files;
-  };
-  export default templates;
+  export default Files;
 }

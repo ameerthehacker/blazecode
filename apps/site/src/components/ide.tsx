@@ -56,6 +56,7 @@ export default function IDE({
                       filePaths={filePaths}
                       defaultSelectedFilePath={template.defaultSelectedFilePath}
                       sessionId={sessionId}
+                      types={template.types}
                     />
                   </CardContent>
                 </Card>

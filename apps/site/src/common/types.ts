@@ -5,6 +5,7 @@ export type ProjectTemplate = {
   defaultSelectedFilePath: string;
   visibleFilePaths: string[];
   entry: string;
+  types: string[];
 };
 
 export type YUSer = {

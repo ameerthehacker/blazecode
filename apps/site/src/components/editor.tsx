@@ -15,6 +15,7 @@ const fileIconMap: {
   [extension: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 } = {
   jsx: ReactLogo,
+  tsx: ReactLogo,
   css: CSSLogo,
 };
 
@@ -26,10 +27,12 @@ export default function Editor({
   sessionId,
   filePaths,
   defaultSelectedFilePath,
+  types,
 }: {
   sessionId: string;
   filePaths: string[];
   defaultSelectedFilePath: string;
+  types: string[];
 }) {
   const { openFilePath, setInitialEditorCursor, setOpenEditorFilePath } =
     useEditorState();
@@ -135,7 +138,7 @@ export default function Editor({
           </div>
         </TabsList>
       </Tabs>
-      {openFilePath && <CodeEditor filePath={openFilePath} />}
+      {openFilePath && <CodeEditor filePath={openFilePath} types={types} />}
     </>
   );
 }

@@ -9,6 +9,7 @@ import { YText } from 'yjs/dist/src/types/YText';
 import { useSandpack } from '@codesandbox/sandpack-react';
 import { useEditorState } from '@/hooks/state';
 import { Spinner } from './ui/spinner';
+import monacoTypes from '@/memfs/monaco-types';
 
 const darkTheme: editor.IStandaloneThemeData = {
   base: 'vs-dark',
@@ -41,6 +42,8 @@ const darkTheme: editor.IStandaloneThemeData = {
 };
 const extLanguageMap = {
   jsx: 'javascript',
+  tsx: 'typescript',
+  ts: 'typescript',
   css: 'css',
   html: 'html',
 };
@@ -51,8 +54,43 @@ const getLanguage = (filePath: string) => {
   const extension = getExtension(filePath);
   return extLanguageMap[extension as keyof typeof extLanguageMap];
 };
+function useMonacoTypeDefinitions(types: string[]) {
+  const monaco = useMonaco();
 
-export default function CodeEditor({ filePath }: { filePath: string }) {
+  useEffect(() => {
+    if (!monaco) return;
+
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2016,
+      allowNonTsExtensions: true,
+      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      module: monaco.languages.typescript.ModuleKind.CommonJS,
+      noEmit: true,
+      jsx: monaco.languages.typescript.JsxEmit.ReactJSX,
+    });
+    const libs = Object.keys(monacoTypes)
+      .filter((filePath) =>
+        types.some((type) => filePath.startsWith(`/${type}`))
+      )
+      .map((filePath) => ({
+        filePath: `file:///node_modules${filePath}`,
+        content: monacoTypes[filePath],
+      }));
+    monaco.languages.typescript.typescriptDefaults.setExtraLibs(libs);
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: false,
+      noSyntaxValidation: false,
+    });
+  }, [monaco, types]);
+}
+
+export default function CodeEditor({
+  filePath,
+  types,
+}: {
+  filePath: string;
+  types: string[];
+}) {
   const models = useRef<{ [key: string]: editor.ITextModel | null }>({});
   const viewStates = useRef<{
     [key: string]: editor.ICodeEditorViewState | null;
@@ -73,6 +111,9 @@ export default function CodeEditor({ filePath }: { filePath: string }) {
     },
     500
   );
+
+  // fetch type defintions for external libs
+  useMonacoTypeDefinitions(types);
 
   useEffect(() => {
     // if user does not do anything for 1s in editor then mark as inactive

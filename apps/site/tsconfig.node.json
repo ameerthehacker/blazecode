@@ -5,5 +5,5 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["vite.config.js", "vite-plugins/template.ts"]
+  "include": ["vite.config.js", "vite-plugins/memfs.ts"]
 }
