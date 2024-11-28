@@ -1,6 +1,6 @@
 import { Editor as MonacoEditor, useMonaco } from '@monaco-editor/react';
 import { useEffect, useRef, useState } from 'react';
-import type { editor } from 'monaco-editor';
+import type * as monaco from 'monaco-editor';
 import { useY } from '@/contexts/y-doc';
 import { useAwarness, useDebounce, useYFilesSync } from '@/hooks';
 import { MonacoBinding } from 'y-monaco';
@@ -10,24 +10,77 @@ import { useSandpack } from '@codesandbox/sandpack-react';
 import { useEditorState } from '@/hooks/state';
 import { Spinner } from './ui/spinner';
 import monacoTypes from '@/memfs/monaco-types';
+import { tsTokenProvider } from '@/common/ts-token-provider';
 
-const darkTheme: editor.IStandaloneThemeData = {
+const darkTheme: monaco.editor.IStandaloneThemeData = {
   base: 'vs-dark',
   inherit: true,
   // night owl dark theme
   rules: [
-    { token: 'comment', foreground: '#6A9955' },
-    { token: 'keyword', foreground: '#C586C0' },
-    { token: 'string', foreground: '#CE9178' },
-    { token: 'number', foreground: '#B5CEA8' },
-    { token: 'regexp', foreground: '#D16969' },
-    { token: 'type', foreground: '#4EC9B0' },
-    { token: 'class', foreground: '#4EC9B0' },
-    { token: 'function', foreground: '#DCDCAA' },
-    { token: 'variable', foreground: '#9CDCFE' },
-    { token: 'variable.predefined', foreground: '#4FC1FF' },
-    { token: 'interface', foreground: '#4EC9B0' },
-    { token: 'delimiter', foreground: '#CCCCCC' },
+    { token: '', foreground: '#d6deeb' },
+    { token: 'variable', foreground: '#82aaff' },
+    { token: 'method.ts', foreground: '#82aaff' },
+    { token: 'keyword', foreground: '#c792ea' },
+    { token: 'keyword.json', foreground: '#c792ea' },
+    { token: 'keyword.flow', foreground: '#c792ea' },
+    { token: 'keyword.control', foreground: '#c792ea' },
+    { token: 'keyword.control.conditional', foreground: '#c792ea' },
+    { token: 'keyword.control.trycatch', foreground: '#c792ea' },
+    { token: 'keyword.control.loop', foreground: '#c792ea' },
+    { token: 'keyword.operator.new', foreground: '#7fdbca' },
+    { token: 'keyword.operator.expression', foreground: '#7fdbca' },
+    { token: 'keyword.other.unit', foreground: '#c792ea' },
+    { token: 'operator', foreground: '#7fdbca' },
+    { token: 'string', foreground: '#ecc48d' },
+    { token: 'string.escape', foreground: '#ecc48d' },
+    { token: 'string.regexp', foreground: '#5ca7e4' },
+    { token: 'string.template', foreground: '#ecc48d' },
+    { token: 'constant', foreground: '#82aaff' },
+    { token: 'constant.numeric', foreground: '#f78c6c' },
+    { token: 'constant.language', foreground: '#82aaff' },
+    { token: 'constant.character', foreground: '#82aaff' },
+    { token: 'constant.other', foreground: '#82aaff' },
+    { token: 'variable.language', foreground: '#7fdbca' },
+    { token: 'variable.other', foreground: '#d6deeb' },
+    { token: 'variable.parameter', foreground: '#7fdbca' },
+    { token: 'variable.other.constant', foreground: '#82aaff' },
+    { token: 'comment', foreground: '#637777' },
+    { token: 'comment.doc', foreground: '#637777' },
+    { token: 'tag', foreground: '#7fdbca' },
+    { token: 'tag.id.pug', foreground: '#7fdbca' },
+    { token: 'tag.class.pug', foreground: '#7fdbca' },
+    { token: 'meta.tag', foreground: '#7fdbca' },
+    { token: 'meta.brace', foreground: '#d6deeb' },
+    { token: 'attribute.name', foreground: '#addb67' },
+    { token: 'attribute.value', foreground: '#ecc48d' },
+    { token: 'attribute.value.number', foreground: '#f78c6c' },
+    { token: 'attribute.value.unit', foreground: '#c792ea' },
+    { token: 'attribute.value.html', foreground: '#addb67' },
+    { token: 'attribute.value.xml', foreground: '#addb67' },
+    { token: 'storage', foreground: '#c792ea' },
+    { token: 'storage.type', foreground: '#c792ea' },
+    { token: 'storage.modifier', foreground: '#c792ea' },
+    { token: 'support', foreground: '#7fdbca' },
+    { token: 'support.class', foreground: '#addb67' },
+    { token: 'support.type', foreground: '#addb67' },
+    { token: 'support.function', foreground: '#82aaff' },
+    { token: 'entity.name.function', foreground: '#82aaff' },
+    { token: 'entity.name.class', foreground: '#addb67' },
+    { token: 'entity.name.type', foreground: '#addb67' },
+    { token: 'entity.name.tag', foreground: '#7fdbca' },
+    { token: 'entity.other.attribute-name', foreground: '#addb67' },
+    { token: 'invalid', foreground: '#ff5874' },
+    { token: 'invalid.deprecated', foreground: '#ff5874' },
+    // JSON specific
+    { token: 'string.key', foreground: '#7fdbca' },
+    { token: 'string.value', foreground: '#ecc48d' },
+    // Markdown specific
+    { token: 'markup.heading', foreground: '#c792ea', fontStyle: 'bold' },
+    { token: 'markup.bold', fontStyle: 'bold' },
+    { token: 'markup.strikethrough', fontStyle: 'strikethrough' },
+    // RegExp
+    { token: 'regexp.escape', foreground: '#5ca7e4' },
+    { token: 'regexp.control', foreground: '#5ca7e4' },
   ],
   colors: {
     'editor.background': '#0A0A0A',
@@ -91,16 +144,15 @@ export default function CodeEditor({
   filePath: string;
   types: string[];
 }) {
-  const models = useRef<{ [key: string]: editor.ITextModel | null }>({});
+  const models = useRef<{ [key: string]: monaco.editor.ITextModel | null }>({});
   const viewStates = useRef<{
-    [key: string]: editor.ICodeEditorViewState | null;
+    [key: string]: monaco.editor.ICodeEditorViewState | null;
   }>({});
   const { setUserActive, setCursor } = useAwarness();
   const { webrtcProvider } = useY();
   const { getFileYText } = useYFilesSync();
-  const [editor, setEditor] = useState<editor.IStandaloneCodeEditor | null>(
-    null
-  );
+  const [editor, setEditor] =
+    useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   const { initialEditorCursor, resetInitialEditorCursor } = useEditorState();
   const userActiveTimerRef = useRef<NodeJS.Timeout>();
   const monaco = useMonaco();
@@ -207,9 +259,13 @@ export default function CodeEditor({
             text={<span className="text-sm text-gray-300">Loading...</span>}
           />
         }
-        beforeMount={(monaco) =>
-          monaco.editor.defineTheme('bc-dark', darkTheme)
-        }
+        beforeMount={(monaco) => {
+          monaco.editor.defineTheme('bc-dark', darkTheme);
+          monaco.languages.setMonarchTokensProvider(
+            'typescript',
+            tsTokenProvider as monaco.languages.IMonarchLanguage
+          );
+        }}
         onChange={(value) => updateSandpackFile(filePath, value ?? '')}
         onMount={(editor) => {
           setEditor(editor);
