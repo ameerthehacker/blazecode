@@ -2,10 +2,7 @@ import { Files, YAwarness, YUSer as YUser } from '@/common/types';
 import { getRandomColor, injectYMonacoCSS } from '@/common/utils';
 import { useUser } from '@/contexts/user';
 import { useY } from '@/contexts/y-doc';
-import {
-  needsTemplateHydration,
-  setNeedsTemplateHydration,
-} from '@/storage';
+import { needsTemplateHydration, setNeedsTemplateHydration } from '@/storage';
 import { useEffect, useRef, useState } from 'react';
 
 const FILES_MAP_KEY = 'files';

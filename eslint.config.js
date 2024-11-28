@@ -7,7 +7,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   {
-    ignores: ['**.cjs'],
+    ignores: ['**.cjs', '**.d.ts'],
     languageOptions: {
       globals: {
         __dirname: 'readonly',

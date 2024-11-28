@@ -1,5 +1,5 @@
-import "./styles.css";
+import './styles.css';
 
-document.getElementById("app").innerHTML = `
+document.getElementById('app').innerHTML = `
 <h1>Hello JavaScript!</h1>
 `;

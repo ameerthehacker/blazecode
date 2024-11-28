@@ -1,3 +1,2 @@
 pnpx prettier $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
-pnpx eslint $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
 git update-index --again
