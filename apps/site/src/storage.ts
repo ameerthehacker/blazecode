@@ -33,7 +33,7 @@ export function setTemplate(sessionId: string, template: string) {
 }
 
 export function getTemplate(sessionId: string) {
-  return localStorage.getItem(getTemplateToHydrateKey(sessionId)) as string;
+  return localStorage.getItem(getTemplateToHydrateKey(sessionId));
 }
 
 export function setNeedsTemplateHydration(sessionId: string, needs: boolean) {

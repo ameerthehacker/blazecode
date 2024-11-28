@@ -13,27 +13,20 @@ import { useState } from 'react';
 import { ResizablePanelGroup } from './ui/resizable';
 import Editor from './editor';
 import { SandpackProvider } from '@codesandbox/sandpack-react';
-import { ProjectTemplate } from '@/common/types';
 import { Spinner } from './ui/spinner';
 
-export default function IDE({
-  template,
-  sessionId,
-}: {
-  template: ProjectTemplate;
-  sessionId: string;
-}) {
+export default function IDE({ sessionId }: { sessionId: string }) {
   const [isResizing, setIsResizing] = useState(false);
   const { getFiles } = useYFilesSync();
   const files = getFiles();
+  const template = useYFilesSetup(sessionId);
   const filePaths = Object.keys(files)
-    .filter((filePath) => template.visibleFilePaths.includes(filePath))
+    .filter((filePath) => template?.visibleFilePaths.includes(filePath))
     .sort();
-  useYFilesSetup(template.files, sessionId);
 
   return (
     <div className="h-lvh w-full">
-      {filePaths.length > 0 ? (
+      {template && filePaths.length > 0 ? (
         <SandpackProvider
           files={Object.fromEntries(
             Object.entries(files).map(([path, content]) => [

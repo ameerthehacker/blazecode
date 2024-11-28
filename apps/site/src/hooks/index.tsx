@@ -2,10 +2,17 @@ import { Files, YAwarness, YUSer as YUser } from '@/common/types';
 import { getRandomColor, injectYMonacoCSS } from '@/common/utils';
 import { useUser } from '@/contexts/user';
 import { useY } from '@/contexts/y-doc';
-import { needsTemplateHydration, setNeedsTemplateHydration } from '@/storage';
+import {
+  getTemplate,
+  needsTemplateHydration,
+  setNeedsTemplateHydration,
+} from '@/storage';
+import { templates } from '@/templates';
 import { useEffect, useRef, useState } from 'react';
 
 const FILES_MAP_KEY = 'files';
+const CONFIG_KEY = 'config';
+const TEMPLATE_KEY = 'template';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useDebounce<T extends (...args: any[]) => void>(
@@ -31,12 +38,24 @@ function useReRender() {
   return usePersistentCallback(() => setValue((value) => value + 1));
 }
 
-export function useYFilesSetup(files: Files, sessionId: string) {
+export function useYFilesSetup(sessionId: string) {
   const { doc } = useY();
+  const yConfigMap = doc.getMap<string>(CONFIG_KEY);
+  const rerender = useReRender();
+  const templateName = yConfigMap.get(TEMPLATE_KEY);
+
+  useEffect(() => {
+    yConfigMap.observe(rerender);
+    return () => yConfigMap.unobserve(rerender);
+  }, []);
+
   useEffect(() => {
     const yFilesMap = doc.getMap<boolean>(FILES_MAP_KEY);
 
     if (needsTemplateHydration(sessionId)) {
+      const templateName = getTemplate(sessionId) as string;
+      const { files } = templates[templateName];
+
       for (const filePath in files) {
         if (!yFilesMap.has(filePath)) {
           yFilesMap.set(filePath, true);
@@ -44,9 +63,13 @@ export function useYFilesSetup(files: Files, sessionId: string) {
           yText.insert(0, files[filePath]);
         }
       }
+
+      yConfigMap.set(TEMPLATE_KEY, templateName);
       setNeedsTemplateHydration(sessionId, false);
     }
-  }, [doc, files, sessionId]);
+  }, [doc, sessionId]);
+
+  return templateName ? templates[templateName] : null;
 }
 
 export function useYFilesSync() {
